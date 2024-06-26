@@ -11,7 +11,7 @@ class MRUCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
-        """"""
+        """ assigns to dictionary the item for the key """
         if key and item:
             if key in self.usage_record:
                 self.usage_record.remove(key)

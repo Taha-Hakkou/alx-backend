@@ -10,7 +10,7 @@ class LIFOCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
-        """  """
+        """ assigns to dictionary the item for the key """
         if key and item:
             if len(self.cache_data) == BaseCaching.MAX_ITEMS:
                 discarded_key = sorted(self.cache_data.keys())[-1]

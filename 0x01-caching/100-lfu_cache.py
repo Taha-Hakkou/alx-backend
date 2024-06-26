@@ -12,7 +12,7 @@ class LFUCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
-        """"""
+        """ assigns to dictionary the item for the key """
         if key and item:
             if key in self.cache_data:
                 self.frequency_record[key] += 1
