@@ -25,22 +25,25 @@ class LFUCache(BaseCaching):
                 keys = sorted(self.frequency_record.keys())
                 dkeys = [keys[0]]
                 for k in keys:
-                    if self.frequency_record.get(k) < self.frequency_record.get(dkeys[0]):
+                    fk = self.frequency_record.get(k)
+                    fdk = self.frequency_record.get(dkeys[0])
+                    if fk < fdk:
                         dkeys = [k]
-                    elif self.frequency_record.get(k) == self.frequency_record.get(dkeys[0]):
+                    elif fk == fdk:
                         dkeys.append(k)
-                index = self.usage_record.index(dkeys[0])
-                if len(dkeys) > 1:
+                if len(dkeys) == 1:
+                    discarded_key = dkeys[0]
+                else:
+                    index = self.usage_record.index(dkeys[0])
                     for k in dkeys:
-                        if k != key and self.usage_record.index(k) < index:
+                        if self.usage_record.index(k) < index:
                             index = self.usage_record.index(k)
-                discarded_key = self.usage_record[index]
-                #
+                    discarded_key = self.usage_record[index]
+
                 del self.cache_data[discarded_key]
                 del self.frequency_record[discarded_key]
                 self.usage_record.remove(discarded_key)
                 print(f'DISCARD: {discarded_key}')
-            #self.usage_record.append(key)
 
     def get(self, key):
         """ returns the item linked to key """
