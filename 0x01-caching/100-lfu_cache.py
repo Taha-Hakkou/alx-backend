@@ -24,7 +24,7 @@ class LFUCache(BaseCaching):
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
                 keys = sorted(self.frequency_record.keys())
                 dkeys = [keys[0]]
-                for k in keys:
+                for k in keys[:-1]:
                     fk = self.frequency_record.get(k)
                     fdk = self.frequency_record.get(dkeys[0])
                     if fk < fdk:
