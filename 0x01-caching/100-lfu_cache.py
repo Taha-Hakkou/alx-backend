@@ -22,7 +22,7 @@ class LFUCache(BaseCaching):
             self.usage_record.append(key)
             self.cache_data[key] = item
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                keys = sorted(self.frequency_record.keys())
+                keys = self.usage_record
                 dkeys = [keys[0]]
                 for k in keys[:-1]:
                     fk = self.frequency_record.get(k)
@@ -36,7 +36,7 @@ class LFUCache(BaseCaching):
                 else:
                     index = self.usage_record.index(dkeys[0])
                     for k in dkeys:
-                        if self.usage_record.index(k) < index:
+                        if k != key and self.usage_record.index(k) < index:
                             index = self.usage_record.index(k)
                     discarded_key = self.usage_record[index]
 
