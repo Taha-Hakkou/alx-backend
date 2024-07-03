@@ -8,7 +8,8 @@ from typing import Any, Dict
 class Config:
     """ Flask configuration class """
     LANGUAGES = ['en', 'fr']
-
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -19,8 +20,6 @@ users = {
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
 babel = Babel(app)
 
 
