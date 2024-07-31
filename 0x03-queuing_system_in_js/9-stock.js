@@ -26,7 +26,11 @@ const reserveStockById = (itemId, stock) => {
 
 const getCurrentReservedStockById = async (itemId) => {
   const value = await getAsync(`item.${itemId}`);
-  return value;
+  return Number(value);
+}
+
+for (const product of listProducts) {
+  reserveStockById(product.Id, product.stock);
 }
 
 //*************************************************************//
@@ -43,7 +47,7 @@ app.get('/list_products', (req, res) => {
   })));
 });
 
-app.get('/list_products/:itemId', (req, res) => {
+app.get('/list_products/:itemId', async (req, res) => {
   const itemId = Number(req.params.itemId);
   const item = getItemById(itemId);
   if (item === undefined) {
@@ -54,18 +58,18 @@ app.get('/list_products/:itemId', (req, res) => {
       'itemName': item.name,
       'price': item.price,
       'initialAvailableQuantity': item.stock,
-      'currentQuantity': getCurrentReservedStockById(itemId)
+      'currentQuantity': await getCurrentReservedStockById(itemId)
     });
   }
 });
 
-app.get('/reserve_product/:itemId', (req, res) => {
+app.get('/reserve_product/:itemId', async (req, res) => {
   const itemId = Number(req.params.itemId);
   const item = getItemById(itemId);
   if (item === undefined) {
     res.json({'status': 'Product not found'});
   } else {
-    const currentStock = getCurrentReservedStockById(itemId);
+    const currentStock = await getCurrentReservedStockById(itemId);
     if (currentStock < 1) {
       res.json({
         'status': 'Not enough stock available',
@@ -73,7 +77,7 @@ app.get('/reserve_product/:itemId', (req, res) => {
       });
     } else {
       reserveStockById(itemId, currentStock - 1);
-      res.jsno({
+      res.json({
         'status': 'Reservation confirmed',
         'itemId': itemId
       });
